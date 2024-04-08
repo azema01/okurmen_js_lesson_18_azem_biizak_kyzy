@@ -1,3 +1,1 @@
 # okurmen_js_hw_18_azem_biizak_kyzy
-# okurmen_js_hw_18_azem_biizak_kyzy
-# okurmen_js_hw_18_azem_biizak_kyzy

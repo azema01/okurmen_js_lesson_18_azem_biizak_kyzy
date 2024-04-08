@@ -1,67 +1,52 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const nowDate = new Date();
+function addCard() {
+    const cardContainer = document.getElementById('cardContainer');
+    const number = document.getElementById('searchInput').value;
+    const date = document.getElementById('dateInput').value;
+    const info = document.getElementById('infoInput').value;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div>${number}</div>
+      <div>${date}</div>
+      <div>${info}</div>
+      <button onclick="deleteCard(this)">X</button>
+    `;
+    cardContainer.appendChild(card);
+    saveToLocalStorage();
+  }
 
-    const day = nowDate.getDate();
-    const month = nowDate.getMonth() + 1;
-    const year = nowDate.getFullYear();
-    const momentDate = moment(nowDate).format('DD - MMM - YYYY');
+  function deleteCard(btn) {
+    const card = btn.parentElement;
+    card.remove();
+    saveToLocalStorage();
+  }
 
-    document.querySelector('#day').innerHTML = day;
-    document.querySelector('#month').innerHTML = month;
-    document.querySelector('#year').innerHTML = year;
-    document.querySelector('#moment').innerHTML = momentDate;
-
-    const countryInput = document.querySelector('#country-input');
-    const countryForm = document.querySelector('#form');
-    const content = document.querySelector('.content');
-    let valueInput;
-    const localData = localStorage.getItem('countries');
-    let arrayData = localData ? JSON.parse(localData) : [];
-
-    async function getCountries(url) {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        return data;
-    }
-
-    countryInput.addEventListener('change', (e) => {
-        valueInput = e.target.value;
+  function saveToLocalStorage() {
+    const cards = document.querySelectorAll('.card');
+    const cardData = [];
+    cards.forEach(card => {
+      const number = card.querySelector('div:nth-child(1)').textContent;
+      const date = card.querySelector('div:nth-child(2)').textContent;
+      const info = card.querySelector('div:nth-child(3)').textContent;
+      cardData.push({ number, date, info });
     });
+    localStorage.setItem('cards', JSON.stringify(cardData));
+  }
 
-    countryForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        if (valueInput && valueInput !== '') {
-            const data = await getCountries(`https://restcountries.com/v3.1/name/${valueInput}`);
-
-            data.map((item) => {
-                arrayData.push(item);
-            });
-
-            localStorage.setItem('countries', JSON.stringify(arrayData));
-
-            renderData(arrayData);
-
-            countryInput.value = '';
-        }
+  function loadFromLocalStorage() {
+    const cardContainer = document.getElementById('cardContainer');
+    const cardsData = JSON.parse(localStorage.getItem('cards')) || [];
+    cardsData.forEach(data => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div>${data.number}</div>
+        <div>${data.date}</div>
+        <div>${data.info}</div>
+        <button onclick="deleteCard(this)">X</button>
+      `;
+      cardContainer.appendChild(card);
     });
+  }
 
-    function renderData(data) {
-        content.innerHTML = '';
-
-        if (data.length !== 0) {
-            data.map((item) => {
-                const country = document.createElement('p');
-                country.innerHTML = item.name.common;
-                content.appendChild(country);
-            });
-        }
-    }
-
-    renderData(arrayData);
-
-    // sessionStorage.setItem('Hello', valueEl);
-
-    sessionStorage.getItem('Hello');
-});
+  loadFromLocalStorage();

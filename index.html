@@ -4,19 +4,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css">
     <title>Lesson 18</title>
 </head>
 
 <body>
-    <p id="day"></p>
-    <p id="month"></p>
-    <p id="year"></p>
-    <p id="moment"></p>
-    <form id="form">
-        <input id="country-input" type="text" />
-        <button id="button-send" type="submit">Send</button>
-    </form>
-    <div class="content"></div>
+    <div id="cardContainer"></div>
+    <input type="text" id="searchInput" placeholder="Олко">
+    <input type="text" id="dateInput" placeholder="Дата">
+    <textarea id="infoInput" placeholder="Маалымат"></textarea>
+    <button onclick="addCard()">Карточка кошуу</button>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
     <script src="./index.js"></script>
 </body>
